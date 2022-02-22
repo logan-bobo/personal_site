@@ -1,4 +1,4 @@
-# personal Site
+# Personal Site
 A personal site to hold information about myself and blog posts
 
 ## Creating a serverless website using AWS, GitHub and Pullumi.
