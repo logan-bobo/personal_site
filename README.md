@@ -12,25 +12,11 @@ During our deployment I also want to out our infrastructure then deploy our cont
 ![arch](images/arch.png)
 
 ## Installing and configuring Hugo
-I needed to install Hugo and its dependencies locally on my device. Go is a dependency of Hugo so we will need that. Download the `.tar.gz` file from the golang web page and run
-```bash
-rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.7.linux-amd64.tar.gz
-```
-Add the Go binary to to your path, its best to add this to your `~/.bash_profile`
-```bash
-export PATH=$PATH:/usr/local/go/bin
-```
+I needed to install Hugo and its dependency `go`.
+- Install [Go](https://go.dev/doc/install).
+- Install [Hugo](https://gohugo.io/getting-started/installing/).
 
-Installing Hugo 
-``` bash
-mkdir $HOME/src
-cd $HOME/src
-git clone https://github.com/gohugoio/hugo.git
-cd hugo
-go install --tags extended
-```
-
-After installing hugo and configuring my theme by  adding several configurations to my `config.toml` in the root of the site.  I am able to write posts in  `markdown`, this is made even easier by running `hugo new posts/post.md`. This made it fast to get the site up and running fast. I can then test the configurations with `hugo serve` and run the site locally on the default hugo port so when I navigate to `127.0.0.1:1313` I am presented with my site with my first post.
+After installing hugo and configuring my theme by adding several configurations to my `config.toml` in the root of the site.  I am able to write posts in  `markdown`, this is made even easier by running `hugo new posts/post.md`. Then test the configurations with `hugo serve` and run the site locally on the default hugo port so when I navigate to `127.0.0.1:1313` I am presented with my site with my first post.
 
 ### First result
 As you can see from the minimal setup I have the ability to post content to my site with a nice theme.
