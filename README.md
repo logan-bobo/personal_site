@@ -9,7 +9,7 @@ So now I have a framework. I've met some of my requirements outlined in my intro
 For deployments I can use the same platform where I am storing the source code for this website, GitHub. I can use the actions feature of GitHub to create automations that will run our Hugo build and then push our contents to our S3 Bucket. 
 
 During our deployment I also want to out our infrastructure then deploy our content to the bucket. For this I opted for Pulumi, an infrastructure as code tool to manage my resources in AWS. This tool will allow us to define our infrastructure in Python.
-![S3](images/S3-site.png)
+![S3](images/S3-Site.png)
 
 ## Installing and configuring Hugo
 I needed to install Hugo and its dependencies locally on my device. Go is a dependency of Hugo so we will need that . Download the .tar.gz file from the golang web page and run
