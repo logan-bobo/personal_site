@@ -21,3 +21,24 @@ After installing hugo and configuring my theme by adding several configurations 
 ### First result
 As you can see from the minimal setup I have the ability to post content to my site with a nice theme.
 ![first-site](images/frist-ss.png)
+
+## Building out the infrastrcuture
+
+### Getting Started with pulumi
+So after installing [Pulumi](https://www.pulumi.com/docs/get-started/install/). I needed to start my project
+```bash
+pulumi new personal-site
+```
+
+
+### Building the S3 Bucket
+
+### Building out the CloudFront Distrobution
+
+### Working with Certificare Manager
+
+### Setting up Route 53
+
+## Building our pipeline
+
+
