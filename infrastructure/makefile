@@ -10,3 +10,6 @@ lint:
 fmt:
 	terraform fmt -recursive
 
+destroy:
+	terraform destroy -var-file=env.tfvars
+

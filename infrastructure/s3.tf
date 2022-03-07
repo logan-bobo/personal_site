@@ -1,5 +1,10 @@
+resource "random_string" "random" {
+    length           = 4
+    special          = false
+}
+
 resource "aws_s3_bucket" "blog" {
-    bucket = var.blog_bucket_name
+    bucket = "${random_string.random.result}-var.blog_bucket_name"
     tags   = var.global_tags
 }
 

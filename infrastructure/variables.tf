@@ -1,5 +1,5 @@
 variable "blog_bucket_name" {
-    description = "Out main blog bucket where contents are served from"
+    description = "Our main blog bucket where contents are served from"
     type = string
 }
 
