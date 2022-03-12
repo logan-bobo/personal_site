@@ -12,3 +12,8 @@ variable "domain" {
     description = "Our main domain"
     type = string
 }
+
+variable "dns_zone_id" {
+  description = "The zone ID of our main domain, note this is not meneged by this repository as it is used for multiple projects"
+  type= string
+}
