@@ -168,14 +168,78 @@ resource "aws_acm_certificate_validation" "blog" {
 }
 ```
 
-### Building out the CloudFront Distrobution
+### Building out the CloudFront Distribution
 
-Cloudfront is the content delivery network in AWS. This is a set of globaly distrobuted servers that allow us to cache content. This is where we are going to cache our websites content that is saved in S3. This should give us lower latency than if we were to serve the contents directly from S3 using the static website hosting feature, as it will be cached in an AWS edge location. This also provides greater security as we can restrict access to our S3 bucket so it can only be accessed by CloudFront, meaning no user will have access they wil be served the content from the edge location. Another secruity improvment over S3 static website hosting is the S3 webstie endpoint does not support HTTPS, an encrypted comunication protocol. Meaning the content would be served over HTTP an insecure protocol.
+Cloudfront is the content delivery network in AWS. This is a set of globaly distrobuted servers that allow us to cache content. This is where we are going to cache our websites content that is saved in S3. This should give us lower latency than if we were to serve the contents directly from S3 using the static website hosting feature, as it will be cached in an AWS edge location. This also provides greater security as we can restrict access to our S3 bucket so it can only be accessed by the CloudFront service, meaning no user will have access and they wil be served the content from the edge location. Another secruity improvment over S3 static website hosting is the S3 webstie endpoint does not support HTTPS, an encrypted comunication protocol. Meaning the content would be served over HTTP an insecure protocol.
 
+```
+
+locals {
+    s3_origin_id = "S3Origin"
+}
+
+resource "aws_cloudfront_origin_access_identity" "blog" {
+    comment = "custom OAI for S3 blog"
+}
+
+resource "aws_cloudfront_distribution" "s3_distribution" {
+    origin {
+        domain_name = aws_s3_bucket.blog.bucket_regional_domain_name
+        origin_id   = local.s3_origin_id
+
+        s3_origin_config {
+        origin_access_identity = aws_cloudfront_origin_access_identity.blog.cloudfront_access_identity_path
+        }
+    }
+
+    enabled             = true
+    is_ipv6_enabled     = true
+    default_root_object = "index.html"
+
+    aliases = ["www.logan-cox.com", "logan-cox.com"]
+
+    default_cache_behavior {
+        allowed_methods  = ["GET", "HEAD"]
+        cached_methods   = ["GET", "HEAD"]
+        target_origin_id = local.s3_origin_id
+
+        forwarded_values {
+            query_string = false
+
+            cookies {
+                forward = "none"
+            }
+        }
+        viewer_protocol_policy = "redirect-to-https"
+        min_ttl                = 0
+        default_ttl            = 3600
+        max_ttl                = 86400
+    }
+
+    price_class = "PriceClass_200"
+
+    restrictions {
+        geo_restriction {
+        restriction_type = "whitelist"
+        locations        = ["US", "CA", "GB", "DE", "FR"]
+        }
+    }
+
+    tags = var.global_tags
+
+    viewer_certificate {
+        cloudfront_default_certificate = false
+        acm_certificate_arn            = aws_acm_certificate.blog.arn
+        minimum_protocol_version       = "TLSv1"
+        ssl_support_method             = "sni-only"
+    }
+}
 ```
 
 
 ### Setting up Route 53
+
+We need a way in witch we can point our domain apex to the adress of our cloudfront distrobution for this we will use an `alias` DNS reccord 
 
 ## Building our build and deployment pipeline pipeline
 
