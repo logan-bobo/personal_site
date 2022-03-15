@@ -236,10 +236,14 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 }
 ```
 
-
 ### Setting up Route 53
 
-We need a way in witch we can point our domain apex to the adress of our cloudfront distrobution for this we will use an `alias` DNS reccord 
+We need a way in witch we can point our domain apex to the adress of our cloudfront distrobution for this we will use an `alias` DNS reccord to forward all of our traffic to our cloudfront endpoint.
+
+### Implementing default directory indexes
+
+As we can only set a default index for the root of our site any paths will not work for example if the user navigates to domain.com cloudfront will request index.html from the root of our s3 bucket. Where as if a user navigates to domain.com/about they will get an error from cloudfront as 
+
 
 ## Building our build and deployment pipeline pipeline
 

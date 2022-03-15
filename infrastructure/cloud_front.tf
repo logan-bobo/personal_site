@@ -8,6 +8,7 @@ resource "aws_cloudfront_origin_access_identity" "blog" {
 }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
+    depends_on = aws_iam_role.blog
     origin {
         domain_name = aws_s3_bucket.blog.bucket_regional_domain_name
         origin_id   = local.s3_origin_id
@@ -39,6 +40,11 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
         min_ttl                = 0
         default_ttl            = 3600
         max_ttl                = 86400
+
+        lambda_function_association {
+            event_type = "origin-request"
+            lambda_arn = "${aws_lambda_function.blog.arn}:${aws_lambda_function.blog.version}"
+        }
     }
 
     price_class = "PriceClass_200"
@@ -57,6 +63,22 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
         acm_certificate_arn            = aws_acm_certificate.blog.arn
         minimum_protocol_version       = "TLSv1"
         ssl_support_method             = "sni-only"
+    }
+}
+
+
+data "aws_iam_policy_document" "blog_lambda_logging" {
+    statement {
+
+        actions = [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+        ]
+
+        resources = [
+            "arn:aws:logs:*:*:*",
+        ]
     }
 }
 
