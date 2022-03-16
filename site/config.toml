@@ -16,14 +16,12 @@ description = "Logan Cox personal site and blog"
   # Home page profile
   [params.home.profile]
     enable = true
-    # Gravatar Email for preferred avatar in home page
-    gravatarEmail = ""
     # URL of avatar shown in home page
     avatarURL = "/images/avatar.PNG"
     # LoveIt CHANGED | 0.2.7 title shown in home page (HTML format is supported)
     title = ""
     # subtitle shown in home page
-    subtitle = "Hi I'm Logan Cox 👋. An SRE from the north of England, interested in software engineering, infrastructure automation, scaling systems, Linux, kubernetes, cloud engineering, and CI/CD. Currently learning Python, Go, and JavaScript."
+    subtitle = "Hi I'm Logan Cox 👋. An Site Reliability Engineer from the north of England, interested in software engineering, infrastructure automation, scaling systems, Linux, kubernetes, cloud engineering, and CI/CD. Currently learning Python, Go, and JavaScript."
     typeit = true
     social = true
   [params.home.posts]
