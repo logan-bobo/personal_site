@@ -27,6 +27,6 @@ jobs:
           
       - name: test
         run : |
-          go -version
+          go version
           terraform -version
           hugo version
