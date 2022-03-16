@@ -4,9 +4,9 @@ A personal site to hold information about myself and blog posts
 ## Creating a automated serverless website using AWS, GitHub and Terraform.
 I wanted to create a personal website where I could display information about myself and post technical writing surrounding technologies or ideas I am interested in. For me the site had to be serverless, easy to manage posts and have fully automated deployments. The advantage of this is the less time I have to spend building the website or managing servers the more time I can spend on developing my engineering skills or studying for various certifications. This first led me to `Hugo`. A lightweight static site generator written in Go that allows me to control the site through `markdown`  and a `configuration.toml` file! On build `Hugo` will publish an artifact to `public/` in your site root directory. This is the contents for your static site and where your `index.html` will be placed. In fact, it's where you are reading this post from now.
 
-So now I have a framework. I've met some of my requirements outlined in my introduction. I still needed a serverless platform to deploy to. Amazon S3 meets with CloudFront meets the requirement in this scenario, whilst S3 is traditionally  used for object level cloud storage, S3 also has a REST API endpoint that we can use to retrive the files and their contents. We can store our artifact produced by `Hugo` in a bucket and have CloudFront, the AWS CDN service serve the contents to the user
+So now I have a framework. I've met some of my requirements outlined in my introduction. I still needed a serverless platform to deploy to. Amazon S3 meets the requirement in this scenario, whilst S3 is traditionally used for object level cloud storage it also has a static website hosting setting for your S3 bucket. We can store our artifact produced by Hugo in a bucket and have S3 serve the contents. This works because the contents of this bucket are static web content. Anything that utilizes server-side processing such as PHP or Python would not be compatible with this feature.
 
-For deployments I can use the same platform where I am storing the source code for this website, GitHub. I can use the actions feature of GitHub to create automations that will run our `Hugo` build and then push our contents to our S3 Bucket. 
+For deployments I can use the same platform where I am storing the source code for this website, GitHub. The actions feature of GitHub can create automations that will run our `Hugo` build and then push our atrefact to our S3 Bucket. 
 
 During our deployment I also want to deploy our infrastructure then deploy our content to the bucket. For this I opted for Terraform, a widley popular infrastructure as code tool to manage my resources in AWS via code. This give us the advantage of having the configuration of our entire infrastucutre sotred in a version controll system. Then from this we can execute automations to deploy our configurations programitaclly. Also giving us the advantage of rebuilding the entire configuration at any point, itterate on changes faster and taking advantage of terraforms build in idempotency. 
 
@@ -240,14 +240,15 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
 We need a way in witch we can point our domain apex to the adress of our cloudfront distrobution for this we will use an `alias` DNS reccord to forward all of our traffic to our cloudfront endpoint.
 
-### Implementing default directory indexes
-
-As we can only set a default index for the root of our site any paths will not work for example if the user navigates to domain.com cloudfront will request index.html from the root of our s3 bucket. Where as if a user navigates to domain.com/about they will get an error from cloudfront as 
-
 
 ## Building our build and deployment pipeline pipeline
 
 ## Monitoring and alerting for the website
+
+
+## Other solutions S3, CloudFront, OAI and Lambda@Edge
+I had attemped to use the S3 HTTP endpoint to request the resrouces from the bucket meainng the were not publicley exposed however this required a lambda@edge function to route requests as your default index does not apply to sub directories. Thsi gretley impacted my perfoamnce when accessing the website and response times could hit 2 secconds. As there are performance limitations with lambda@edge I decided to go with the S3 static site fronted by CloudFront.
+
 
 
 

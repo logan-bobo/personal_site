@@ -1,9 +1,19 @@
 
 
-resource "aws_cloudfront_distribution" "s3_distribution" {
+resource "aws_cloudfront_distribution" "blog" {
     origin {
-        domain_name = aws_s3_bucket.blog.bucket_regional_domain_name
+        domain_name = aws_s3_bucket.blog.website_endpoint
         origin_id   = "S3-${var.blog_bucket_name}"
+
+        custom_origin_config {
+            http_port              = 80
+            # Required but not used
+            https_port             = 443
+            # The origin endpoint HTTP only hence why we are using cloud front to serve traffic over SSL/TLS
+            origin_protocol_policy = "http-only"
+            # Required but not used
+            origin_ssl_protocols   = ["TLSv1"]
+        }
     }
 
     enabled             = true
