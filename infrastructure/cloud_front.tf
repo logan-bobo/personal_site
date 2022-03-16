@@ -1,21 +1,9 @@
 
-locals {
-    s3_origin_id = "S3Origin"
-}
-
-resource "aws_cloudfront_origin_access_identity" "blog" {
-    comment = "custom OAI for S3 blog"
-}
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
-    depends_on = aws_iam_role.blog
     origin {
         domain_name = aws_s3_bucket.blog.bucket_regional_domain_name
-        origin_id   = local.s3_origin_id
-
-        s3_origin_config {
-        origin_access_identity = aws_cloudfront_origin_access_identity.blog.cloudfront_access_identity_path
-        }
+        origin_id   = "S3-${var.blog_bucket_name}"
     }
 
     enabled             = true
@@ -27,7 +15,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     default_cache_behavior {
         allowed_methods  = ["GET", "HEAD"]
         cached_methods   = ["GET", "HEAD"]
-        target_origin_id = local.s3_origin_id
+        target_origin_id = "S3-${var.blog_bucket_name}"
 
         forwarded_values {
             query_string = false
@@ -41,10 +29,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
         default_ttl            = 3600
         max_ttl                = 86400
 
-        lambda_function_association {
-            event_type = "origin-request"
-            lambda_arn = "${aws_lambda_function.blog.arn}:${aws_lambda_function.blog.version}"
-        }
     }
 
     price_class = "PriceClass_200"
@@ -63,22 +47,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
         acm_certificate_arn            = aws_acm_certificate.blog.arn
         minimum_protocol_version       = "TLSv1"
         ssl_support_method             = "sni-only"
-    }
-}
-
-
-data "aws_iam_policy_document" "blog_lambda_logging" {
-    statement {
-
-        actions = [
-            "logs:CreateLogGroup",
-            "logs:CreateLogStream",
-            "logs:PutLogEvents"
-        ]
-
-        resources = [
-            "arn:aws:logs:*:*:*",
-        ]
     }
 }
 
