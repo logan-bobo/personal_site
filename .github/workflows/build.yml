@@ -25,8 +25,20 @@ jobs:
         with:
           extended: true
           
-      - name: test
+      - name: Terraform init
         run : |
-          go version
-          terraform -version
-          hugo version
+          cd infrastructure
+          make init
+           
+      - name: Terraform validate
+        run : |
+          make validate
+      
+      - name: Terraform lint
+        run : |
+          make lint
+      
+      - name: Terraform plan and apply
+        run : |
+          make plan
+          make apply
