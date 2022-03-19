@@ -50,6 +50,7 @@ The first task here is to [install terraform](https://go.dev/doc/install). When 
 ├── route_53.tf
 ├── s3.tf
 └── variables.tf
+
 ```
  
 You can see here that there are some files that are not represented by `AWS` services.
@@ -68,6 +69,7 @@ terraform {
        key    = "state/main"
    }
 }
+
 ```
  
 To declare variables in terraform we will use a `variables.tf` file a good example will be the bucket name where we will host our build. We set the type to string and add a description, I will not add a default here as I know we are passing in a `tfvars` file and `S3` buckets must be globally unique (we will add a prefix when we create the bucket).
@@ -77,12 +79,14 @@ variable "blog_bucket_name" {
    description = "Our main blog bucket where contents are served from"
    type        = string
 }
+
 ```
  
 Finally we set the value of the variable in the `tfvars` file
  
 ```
 blog_bucket_name = "logan-cox-blog-artifacts"
+
 ```
  
 ### Building the S3 Bucket
@@ -132,12 +136,9 @@ resource "aws_s3_bucket_website_configuration" "blog" {
    }
  
 }
+
 ```
- 
- 
- 
- 
- 
+
 ### Working with Certificate Manager
  
 Before we create our CloudFront distribution we need to ensure we can serve our website over HTTPS. For this we will need a custom SSL certificate. This can be requested using the Certificate Manager service, this allows us to provision and manage SSL/TLS certificates to use with AWS services. There is one caveat with using ACM and CloudFront is that our certificate must belong in the `US-EAST-1` region. So how do we provision resources in multiple regions? We add a provider alias to our configuration as shown below and reference that provider in the resource we are creating.
@@ -161,6 +162,7 @@ resource "aws_acm_certificate" "blog" {
        create_before_destroy = true
    }
 }
+
 ```
  
 As you can see in the configuration we have specified the `provider` argument that allows provisioning of the certificate in the region we set up an alias for. Then we specify the domain name we want to create the SSL/TLS certificate for and our validation method to prove that we do indeed own this domain. This is done via DNS validation where we will add CNAME records AWS provide to our DNS configuration in Route53 to establish we control this domain we are requesting the certificate for. As long as these records exist AWS ACM is also able to auto renew our certificates. We have added the create before destroy lifecycle rule so terraform will create a new certificate before it destroys the old on ensuring it is always available as it will have a unique certificate ID, multiple can exist at once.
@@ -190,6 +192,7 @@ resource "aws_acm_certificate_validation" "blog" {
    certificate_arn         = aws_acm_certificate.blog.arn
    validation_record_fqdns = [for record in aws_route53_record.dns_validation : record.fqdn]
 }
+
 ```
  
 ### Building out the CloudFront Distribution
@@ -256,6 +259,7 @@ resource "aws_cloudfront_distribution" "blog" {
        ssl_support_method             = "sni-only"
    }
 }
+
 ```
  
 ### Setting up Route 53
@@ -274,6 +278,7 @@ resource "aws_route53_record" "blog" {
        evaluate_target_health = true
    }
 }
+
 ```
  
 ## Constructing the build and deployment pipeline
@@ -354,10 +359,12 @@ jobs:
          cd $SITE_DIRECTORY
          make build
     
-     - name: push build artifact to S3
-       run: |
-         cd $SITE_DIRECTORY
-         aws s3 sync public s3://$S3_BUCKET/
+      - name: push build artifact to S3
+        run: |
+          cd $SITE_DIRECTORY
+          aws s3 rm s3://$S3_BUCKET/ --recursive
+          aws s3 sync public s3://$S3_BUCKET/
+
 ```
  
 ## Other solutions S3, CloudFront, OAI and Lambda@Edge
