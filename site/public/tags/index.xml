@@ -1,0 +1,29 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Tags - Tag - Logan Cox</title>
+        <link>https://logan-cox.com/tags/</link>
+        <description>Tags - Tag - Logan Cox</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>mail@logan-cox.com (Logan Cox)</managingEditor>
+            <webMaster>mail@logan-cox.com (Logan Cox)</webMaster><lastBuildDate>Sat, 19 Mar 2022 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://logan-cox.com/tags/" rel="self" type="application/rss+xml" /><item>
+    <title>AWS</title>
+    <link>https://logan-cox.com/tags/aws/</link>
+    <pubDate>Sat, 19 Mar 2022 00:00:00 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://logan-cox.com/tags/aws/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>Cloud</title>
+    <link>https://logan-cox.com/tags/cloud/</link>
+    <pubDate>Sat, 19 Mar 2022 00:00:00 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://logan-cox.com/tags/cloud/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>Terraform</title>
+    <link>https://logan-cox.com/tags/terraform/</link>
+    <pubDate>Sat, 19 Mar 2022 00:00:00 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://logan-cox.com/tags/terraform/</guid>
+    <description><![CDATA[]]></description>
+</item></channel>
+</rss>
