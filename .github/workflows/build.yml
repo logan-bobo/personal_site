@@ -67,7 +67,7 @@ jobs:
       - name: push build artifact to S3
         run: |
           cd $SITE_DIRECTORY
-          aws s3 sync public s3://\"$S3_BUCKET\"/
+          aws s3 sync public s3://$S3_BUCKET/
           
 
 
