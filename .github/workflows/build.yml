@@ -69,6 +69,7 @@ jobs:
         run: |
           cd $SITE_DIRECTORY
           ls -l
+          cd public
           aws s3 rm s3://$S3_BUCKET/ --recursive
 
 
