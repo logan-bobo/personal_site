@@ -28,7 +28,7 @@ After installing `hugo` and configuring my theme by adding several configuration
 As you can see from the minimal setup I have the ability to post content to my site with a nice theme.
 ![first-site](/posts/blog/frist-ss.png)
  
-## Building out the infrastrcuture
+## Building out the infrastructure
  
 As defined in the architechure diagram above, everything in the blue box we are going to be deploying using terraform.
  
