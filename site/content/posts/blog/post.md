@@ -39,7 +39,7 @@ As defined in the architechure diagram above, everything in the blue box we are 
  
 ### Getting Started with Terraform
  
-The first task here is to [install terraform](https://go.dev/doc/install). When we have installed terraform and verified with `terraform -version` we can continue. To start we will structure the files based on services and resources that are utilized in that file.
+The first task here is to [install terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli). When we have installed terraform and verified with `terraform -version` we can continue. To start we will structure the files based on services and resources that are utilized in that file.
  
 ```bash
 .
