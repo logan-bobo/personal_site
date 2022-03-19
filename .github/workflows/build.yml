@@ -30,7 +30,7 @@ jobs:
         
       - name: Setup Hugo
         run: |
-          snap install hugo --channel=extended
+          sudo snap install hugo --channel=extended
       
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
