@@ -18,7 +18,6 @@ env:
 jobs:
   build-infra:
     runs-on: ubuntu-latest
-    working-directory: ${{ infrastrucutre-directory }}
     steps:
       - uses: actions/checkout@v2
       
@@ -35,17 +34,21 @@ jobs:
           
       - name: Terraform init
         run : |
+          cd ${{ infrastrucutre-directory }}
           make init
 
       - name: Terraform validate
         run : |
+          cd ${{ infrastrucutre-directory }}
           make validate
       
       - name: Terraform lint
         run : |
+          cd ${{ infrastrucutre-directory }}
           make lint
       
       - name: Terraform plan and apply
         run : |
+          cd ${{ infrastrucutre-directory }}
           make plan
           make apply
