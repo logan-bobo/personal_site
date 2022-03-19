@@ -28,9 +28,10 @@ jobs:
       - name: HashiCorp - Setup Terraform
         uses: hashicorp/setup-terraform@v1.2.1
         
-      - name: Hugo setup
-        uses: peaceiris/actions-hugo@v2.4.13
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
         with:
+          hugo-version: '0.94.0'
           extended: true
       
       - name: Configure AWS Credentials
