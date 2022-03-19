@@ -47,14 +47,6 @@ description = "Logan Cox personal site and blog"
     url = "/tags/"
     title = ""
     weight = 2
-  [[menu.main]]
-    identifier = "about"
-    pre = ""
-    post = ""
-    name = "About"
-    url = "/about/"
-    title = ""
-    weight = 2
 
 [params.social]
     GitHub = "logan-bobo"
