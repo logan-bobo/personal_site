@@ -6,16 +6,19 @@ on:
   pull_request:
     branches: [ main ]
     
+  # Allows us to trigger at any time
   workflow_dispatch:
 
 env:
     AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
     AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     infrastrucutre-directory: infrastrucutre
+    site-directory: site
 
 jobs:
-  build:
+  build-infra:
     runs-on: ubuntu-latest
+    working-directory: ${{ infrastrucutre-directory }}
     steps:
       - uses: actions/checkout@v2
       
@@ -32,21 +35,17 @@ jobs:
           
       - name: Terraform init
         run : |
-          cd infrastructure
           make init
 
       - name: Terraform validate
         run : |
-          cd infrastructure
           make validate
       
       - name: Terraform lint
         run : |
-          cd infrastructure
           make lint
       
       - name: Terraform plan and apply
         run : |
-          cd infrastructure
           make plan
           make apply
