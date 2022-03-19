@@ -29,10 +29,8 @@ jobs:
         uses: hashicorp/setup-terraform@v1.2.1
         
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: '0.94.0'
-          extended: true
+        run: |
+          snap install hugo --channel=extended
       
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
