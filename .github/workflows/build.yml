@@ -12,11 +12,11 @@ on:
 env:
     AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
     AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    infrastrucutre-directory: infrastrucutre
-    site-directory: site
+    INFRASTRUCTURE_DIRECTORY: infrastrucutre
+    SITE_DIRECTORY: site
 
 jobs:
-  build-infra:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -31,24 +31,42 @@ jobs:
         uses: peaceiris/actions-hugo@v2.4.13
         with:
           extended: true
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-west-1
           
       - name: Terraform init
         run : |
-          cd ${{ infrastrucutre-directory }}
+          aws s3 ls
+          cd $INFRASTRUCTURE_DIRECTORY
           make init
 
       - name: Terraform validate
         run : |
-          cd ${{ infrastrucutre-directory }}
+          cd $INFRASTRUCTURE_DIRECTORY
           make validate
       
       - name: Terraform lint
         run : |
-          cd ${{ infrastrucutre-directory }}
+          cd $INFRASTRUCTURE_DIRECTORY
           make lint
       
       - name: Terraform plan and apply
         run : |
-          cd ${{ infrastrucutre-directory }}
+          cd $INFRASTRUCTURE_DIRECTORY
           make plan
           make apply
+      
+      - name: hugo build
+        run : |
+          cd $INFRASTRUCTURE_DIRECTORY
+          make build
+      
+      - name: push build artefact to S3
+        run: |
+          cd $SITE_DIRECTORY
+          
+
+
