@@ -12,7 +12,7 @@ on:
 env:
     AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
     AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    INFRASTRUCTURE_DIRECTORY: infrastrucutre
+    INFRASTRUCTURE_DIRECTORY: infrastructure
     SITE_DIRECTORY: site
 
 jobs:
@@ -39,7 +39,6 @@ jobs:
           
       - name: Terraform init
         run : |
-          aws s3 ls
           cd $INFRASTRUCTURE_DIRECTORY
           make init
 
