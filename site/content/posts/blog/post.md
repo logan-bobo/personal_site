@@ -15,7 +15,7 @@ For deployments I can use the same platform where I am storing the source code f
  
 During the deployment I also want to deploy the infrastructure then deploy our content to the bucket. For this I opted for Terraform, a widely popular infrastructure as code tool to manage my resources in AWS via code. This give us the advantage of having the configuration of our entire infrastructure stored in a version control system. Then from this we can execute automations to deploy our configurations programmatically. Also giving us the advantage of rebuilding the entire configuration at any point, iterate on changes faster and taking advantage of terraforms idempotency.
  
-![arch](arch.png)
+![arch](/posts/blog/arch.png "arch")
 
 ## Installing and configuring Hugo
 I needed to install Hugo and its dependency `Go`.
@@ -26,7 +26,7 @@ After installing `hugo` and configuring my theme by adding several configuration
  
 ### First result
 As you can see from the minimal setup I have the ability to post content to my site with a nice theme.
-![first-site](frist-ss.png)
+![first-site](/posts/blog/frist-ss.png)
  
 ## Building out the infrastrcuture
  
