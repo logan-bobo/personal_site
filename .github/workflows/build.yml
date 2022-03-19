@@ -14,6 +14,7 @@ env:
     AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     INFRASTRUCTURE_DIRECTORY: infrastructure
     SITE_DIRECTORY: site
+    S3-BUCKET: cnbr-logan-cox-blog-artifacts
 
 jobs:
   build:
@@ -60,12 +61,13 @@ jobs:
       
       - name: hugo build
         run : |
-          cd $INFRASTRUCTURE_DIRECTORY
+          cd $SITE_DIRECTORY
           make build
       
       - name: push build artefact to S3
         run: |
           cd $SITE_DIRECTORY
+          aws s3 sync public s3://$S3-BUCKET/
           
 
 
