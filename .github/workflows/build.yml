@@ -69,9 +69,7 @@ jobs:
       - name: push build artifact to S3
         run: |
           cd $SITE_DIRECTORY
-          ls -l
-          cd public
-          aws s3 rm s3://$S3_BUCKET/ --recursive
-          aws s3 sync public s3://$S3_BUCKET/
+          make prune
+          make build
 
 
