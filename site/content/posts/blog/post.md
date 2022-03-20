@@ -2,27 +2,25 @@
 title: "Creating an automated serverless website using AWS, GitHub and Terraform."
 date: "2022-03-19"
 draft: flase
-description: "Discover what the Hugo - LoveIt theme is all about and the core-concepts behind it."
 tags: ["AWS", "Cloud", "Terraform"]
 ---
 
-## Creating an automated serverless website using AWS, GitHub and Terraform.
-I wanted to create a personal website where I could display information about myself and post technical writing surrounding technologies or ideas I am interested in. For me the site had to be serverless, easy to manage posts and have fully automated deployments. The advantage of this is the less time I have to spend building the website or managing servers the more time I can spend on developing my engineering skills or studying for various certifications. This first led me to `Hugo`. A lightweight static site generator written in Go that allows me to control the site through `markdown`  and a `configuration.toml` file! On build `Hugo` will publish an artifact to `public/` in the site root directory. This is the contents for the static site and where `index.html` will be placed. In fact, it's where you are reading this post from now.
+I wanted to create a personal website where I could display information about myself and post technical writing surrounding technologies or ideas I am interested in. For me the site had to be serverless, easy to manage posts and have fully automated deployments. The advantage of this is the less time I have to spend building the website or managing servers the more time I can spend on developing my engineering skills and working on other proejcts. This first led me to `Hugo`. A lightweight static site generator written in `Go` that allows me to control the site through `markdown`  and a `configuration.toml` file! On build `Hugo` will publish an artefact to `public/` in the site root directory. This is the contents for the static site and where `index.html` will be placed. In fact, it's where you are reading this post from now.
  
-So now I have a framework. I've met some of my requirements outlined in my introduction. I still needed a serverless platform to deploy to. Amazon S3 meets the requirement in this scenario, whilst S3 is traditionally used for object level cloud storage, it also has a static website hosting setting for your S3 bucket. We can store our artifact produced by `Hugo` in a bucket and have S3 serve the contents. This works because the contents of this bucket are static web content. Anything that utilizes server-side processing such as PHP or Python would not be compatible with this feature.
+So now I have a framework. I've met some of my requirements outlined in my introduction. I still needed a serverless platform to deploy to. `Amazon S3` meets the requirement in this scenario, whilst `S3` is traditionally used for object level cloud storage, it also has a static website hosting feature. We can store our artefact produced by `Hugo` in a bucket and have `S3` serve the contents. This works because the contents of this bucket is static web content. Anything that utilizes server-side processing such as `PHP` or `Python` would not be compatible with this feature.
  
-For deployments I can use the same platform where I am storing the source code for this website, GitHub. The actions feature can create automations that will run our `Hugo` build and then push our artifact to S3.
+For deployments I can use the same platform where I am storing the source code for this website, GitHub. The actions feature can create automations that will run our `Hugo` build and then push our artefact to `S3`.
  
-During the deployment I also want to deploy the infrastructure then deploy our content to the bucket. For this I opted for Terraform, a widely popular infrastructure as code tool to manage my resources in AWS via code. This give us the advantage of having the configuration of our entire infrastructure stored in a version control system. Then from this we can execute automations to deploy our configurations programmatically. Also giving us the advantage of rebuilding the entire configuration at any point, iterate on changes faster and taking advantage of terraforms idempotency.
+During the deployment I want to deploy or change our infrastructure as well as deploy our artefact. For this I opted for Terraform, a widely popular infrastructure as code tool to manage my resources in `AWS` via code. This give us the advantage of having the configuration of our entire infrastructure stored in a version control system. Then from this we can execute automations to deploy our configurations programmatically. Also giving us the advantage of rebuilding the entire configuration at any point, iterate on changes faster and take advantage of Terraforms idempotency.
  
 ![arch](/posts/blog/arch.png "arch")
 
 ## Installing and configuring Hugo
-I needed to install Hugo and its dependency `Go`.
+I needed to install `Hugo` and its dependency `Go`.
 - Install [Go](https://go.dev/doc/install).
 - Install [Hugo](https://gohugo.io/getting-started/installing/).
  
-After installing `hugo` and configuring my theme by adding several configurations to my `config.toml` in the root of the site. I am able to write posts in `markdown`, this is made even easier by running `hugo new posts/post.md`. Then test the configurations with `hugo serve` and run the site locally on the default `hugo` port so when I navigate to `127.0.0.1:1313` I am presented with my site and first post.
+After installing `Hugo` and configuring my theme by adding several configurations to my `config.toml` in the root of the site. I am able to write posts in `markdown`, this is made even easier by running `hugo new posts/post.md`. Then test the configurations with `hugo serve` and run the site locally on the default `hugo` port so when I navigate to `127.0.0.1:1313` I am presented with my site and first post.
  
 ### First result
 As you can see from the minimal setup I have the ability to post content to my site with a nice theme.
@@ -30,7 +28,7 @@ As you can see from the minimal setup I have the ability to post content to my s
  
 ## Building out the infrastructure
  
-As defined in the architechure diagram above, everything in the blue box we are going to be deploying using terraform.
+As defined in the architechure diagram above, everything in the blue box we are going to be deploying using `Terraform`.
  
 - S3 bucket
 - Cloud Front distrobution
@@ -39,7 +37,7 @@ As defined in the architechure diagram above, everything in the blue box we are 
  
 ### Getting Started with Terraform
  
-The first task here is to [install terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli). When we have installed terraform and verified with `terraform -version` we can continue. To start we will structure the files based on services and resources that are utilized in that file.
+The first task here is to [install Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli). When we have installed `Terraform` and verified with `terraform -version` we can continue. To start we will structure the files based on services and resources that are utilized in that file.
  
 ```bash
 .
@@ -85,13 +83,13 @@ variable "blog_bucket_name" {
 Finally we set the value of the variable in the `tfvars` file
  
 ```
-blog_bucket_name = "logan-cox-blog-artifacts"
+blog_bucket_name = "logan-cox-blog-artefacts"
 
 ```
  
 ### Building the S3 Bucket
  
-The place we are going to store our website's contents is an S3 bucket. So first we will need to create a bucket with a random prefix to ensure it is globally unique. We will define the name and tags we wish to apply to the bucket. The static website feature must also be enabled with an `index_document` and `error_document`. Finally attaching a bucket policy that makes our bucket publicly accessible.
+The place we are going to store our website's contents is an `S3` bucket. So first we will need to create a bucket with a random prefix to ensure it is globally unique. We will define the name and tags we wish to apply to the bucket. The static website feature must also be enabled with an `index_document` and `error_document`. Finally attaching a bucket policy that makes our bucket publicly accessible.
  
 ```HCL
 resource "random_string" "random" {
@@ -141,7 +139,7 @@ resource "aws_s3_bucket_website_configuration" "blog" {
 
 ### Working with Certificate Manager
  
-Before we create our CloudFront distribution we need to ensure we can serve our website over HTTPS. For this we will need a custom SSL certificate. This can be requested using the Certificate Manager service, this allows us to provision and manage SSL/TLS certificates to use with AWS services. There is one caveat with using ACM and CloudFront is that our certificate must belong in the `US-EAST-1` region. So how do we provision resources in multiple regions? We add a provider alias to our configuration as shown below and reference that provider in the resource we are creating.
+Before we create our `CloudFront distribution` we need to ensure we can serve our website over `HTTPS`. For this we will need a custom SSL certificate. This can be requested using the `Certificate Manager` service, this allows us to provision and manage `SSL/TLS` certificates to use with `AWS` services. The caveat with using `ACM` and `CloudFront` is that our certificate must belong in the `US-EAST-1` region. So how do we provision resources in multiple regions? We add a provider alias to our configuration as shown below and reference that provider in the resource we are creating.
  
 ```HCL
 provider "aws" {
@@ -165,7 +163,7 @@ resource "aws_acm_certificate" "blog" {
 
 ```
  
-As you can see in the configuration we have specified the `provider` argument that allows provisioning of the certificate in the region we set up an alias for. Then we specify the domain name we want to create the SSL/TLS certificate for and our validation method to prove that we do indeed own this domain. This is done via DNS validation where we will add CNAME records AWS provide to our DNS configuration in Route53 to establish we control this domain we are requesting the certificate for. As long as these records exist AWS ACM is also able to auto renew our certificates. We have added the create before destroy lifecycle rule so terraform will create a new certificate before it destroys the old on ensuring it is always available as it will have a unique certificate ID, multiple can exist at once.
+As you can see in the configuration we have specified the `provider` argument that allows provisioning of the certificate in the region we set up an alias for. Then we specify the domain name we want to create the `SSL/TLS` certificate for and our validation method to prove that we do indeed own this domain. This is done via DNS validation, where we will add `CNAME` records AWS provide to our DNS configuration in Route53 to establish we own the domain we are requesting the certificate for. As long as these records exist `AWS ACM` is also able to auto renew our certificates. We have added the create before destroy lifecycle rule so terraform will create a new certificate before it destroys the old on ensuring it is always available as it will have a unique certificate ID, multiple can exist at once for the same domain. 
  
 Here you can see we are creating the necessary DNS records to validate we own this domain and our validator resource.
  
@@ -197,7 +195,7 @@ resource "aws_acm_certificate_validation" "blog" {
  
 ### Building out the CloudFront Distribution
  
-Cloudfront is the content delivery network in AWS. This is a set of globally distributed servers that allow us to cache content. This is where we are going to cache our website's content that is saved in S3. This should give us lower latency than if we were to serve the contents directly from S3 using the static website hosting feature, as it will be cached in an AWS edge location.
+`Cloudfront` is the content delivery network in `AWS`. This is a set of globally distributed servers that allow us to cache content. This is where we are going to cache our website's content that is stored in `S3`. This should give us lower latency than if we were to access the contents directly from `S3` using the static website hosting feature, as it will be cached in an `AWS edge location` and this is what the user will access. 
  
 ```HCL
 resource "aws_cloudfront_distribution" "blog" {
@@ -264,7 +262,7 @@ resource "aws_cloudfront_distribution" "blog" {
  
 ### Setting up Route 53
  
-We need a way in which we can point our domain apex to the address of our cloudfront distribution. For this we will use an `alias` DNS record to forward all of our traffic to our cloudfront endpoint. This means that users will be connecting to cloudfront over `HTTPS` where the content is cached and not the bucket endpoint (HTTP). If the content does not exist in the cache cloudfront will request it from its origin.
+We need a way in which we can point our domain apex to the address of our `cloudfront distribution`. For this we will use an `alias` DNS record to forward all of our traffic to our `cloudfront endpoint`. This means that users will be connecting to `cloudfront` over `HTTPS` where the content is cached and not the bucket endpoint (HTTP). If the content does not exist in the cache `cloudfront` will request it from its origin(S3).
  
 ```HCL
 resource "aws_route53_record" "blog" {
@@ -287,86 +285,93 @@ In Github we can use the actions section to build an automated pipeline that wil
  
 - Configure our build node with the necessary tools
 - Run our terraform actions. Init, lint, plan and apply.
-- Run Hugo build to produce our deployable artifact
-- Copy the artifact to S3
+- Run Hugo build to produce our deployable artefact
+- Remove stale content from S3
+- Copy the artefact to S3
  
-We have a single job that is run, split into multiple steps for each of our actions. We can define our base variables and then run bash commands in each step to build and deploy our site. We have configured this to run on every push and pull request to the main branch.
+We have a single job that is run, split into multiple steps for each of our actions. We can define our base variables and then run `bash` commands in each step to build and deploy our site. We have configured this to run on every push and pull request to the main branch.
  
 ```YAML
 name: website-build
- 
+
 on:
- push:
-   branches: [ main ]
- pull_request:
-   branches: [ main ]
-  
- # Allows us to trigger at any time
- workflow_dispatch:
- 
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
+  # Allows us to trigger at any time
+  workflow_dispatch:
+
 env:
-   AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-   AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-   INFRASTRUCTURE_DIRECTORY: infrastructure
-   SITE_DIRECTORY: site
-   S3_BUCKET: cnbr-logan-cox-blog-artifacts
- 
+    AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+    AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    INFRASTRUCTURE_DIRECTORY: infrastructure
+    SITE_DIRECTORY: site
+    S3_BUCKET: cnbr-logan-cox-blog-artefacts
+
 jobs:
- build:
-   runs-on: ubuntu-latest
-   steps:
-     - uses: actions/checkout@v2
-    
-     - name: Setup Go environment
-       uses: actions/setup-go@v3.0.0
- 
-     - name: HashiCorp - Setup Terraform
-       uses: hashicorp/setup-terraform@v1.2.1
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true  
+          fetch-depth: 0   
       
-     - name: Hugo setup
-       uses: peaceiris/actions-hugo@v2.4.13
-       with:
-         extended: true
-    
-     - name: Configure AWS Credentials
-       uses: aws-actions/configure-aws-credentials@v1
-       with:
-         aws-region: eu-west-1
+      - name: Setup Go environment
+        uses: actions/setup-go@v3.0.0
+
+      - name: HashiCorp - Setup Terraform
+        uses: hashicorp/setup-terraform@v1.2.1
         
-     - name: Terraform init
-       run : |
-         cd $INFRASTRUCTURE_DIRECTORY
-         make init
- 
-     - name: Terraform validate
-       run : |
-         cd $INFRASTRUCTURE_DIRECTORY
-         make validate
-    
-     - name: Terraform lint
-       run : |
-         cd $INFRASTRUCTURE_DIRECTORY
-         make lint
-    
-     - name: Terraform plan and apply
-       run : |
-         cd $INFRASTRUCTURE_DIRECTORY
-         make plan
-         make apply
-    
-     - name: hugo build
-       run : |
-         cd $SITE_DIRECTORY
-         make build
-    
-      - name: push build artifact to S3
+      - name: Setup Hugo
+        run: |
+          sudo snap install hugo --channel=extended
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-west-1
+          
+      - name: Terraform init
+        run : |
+          cd $INFRASTRUCTURE_DIRECTORY
+          make init
+
+      - name: Terraform validate
+        run : |
+          cd $INFRASTRUCTURE_DIRECTORY
+          make validate
+      
+      - name: Terraform lint
+        run : |
+          cd $INFRASTRUCTURE_DIRECTORY
+          make lint
+      
+      - name: Terraform plan and apply
+        run : |
+          cd $INFRASTRUCTURE_DIRECTORY
+          make plan
+          make apply
+      
+      - name: hugo build
+        run : |
+          cd $SITE_DIRECTORY
+          make build
+      
+      - name: push build artefact to S3
         run: |
           cd $SITE_DIRECTORY
-          aws s3 rm s3://$S3_BUCKET/ --recursive
-          aws s3 sync public s3://$S3_BUCKET/
+          make prune
+          make build
 
 ```
  
 ## Other solutions S3, CloudFront, OAI and Lambda@Edge
 I had attempted to use the S3 HTTP endpoint to request the resources from the bucket meaning it was not publicly exposed, however this required a lambda@edge function to route requests as your default index does not apply to sub directories. This gretley impacted my performance when accessing the website and response times could hit 2 seconds. As there are performance limitations with lambda@edge I decided to go with the S3 static with CloudFront.
  
+
+## Future Improvment
+
+In a later post I will explore some more topics arround my site such as monitoring and alerting, expanding the cloudfront and S3 deployment to multiple regions, adding a staging environment and a canary deployment pattern to the "production" environment. 
