@@ -360,11 +360,11 @@ jobs:
           cd $SITE_DIRECTORY
           make build
       
-      - name: push build artefact to S3
+      - name: push build artifact to S3
         run: |
           cd $SITE_DIRECTORY
           make prune
-          make build
+          make deploy
 
 ```
  
