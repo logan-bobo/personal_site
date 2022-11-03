@@ -46,6 +46,7 @@ resource "aws_cloudfront_distribution" "blog" {
   restrictions {
     geo_restriction {
       restriction_type = "none"
+      locations = []
     }
   }
 
