@@ -122,7 +122,3 @@ resource "aws_lb_listener_rule" "example" {
 We have secured our public ALB so it is only accessible via our CloudFront distribution. This has been done by encrypting traffic between CF and the ALB. Attaching a custom HTTP header in the origin request as a secret token, then the ALB will only forward requests that contain the secret token. Finally, the ALB will only respond to requests that have come from a dedicated list of CF distribution IPs. This protects us at multiple layers of the OSI model, at the IP level (layer 3) by restricting traffic based on origin IP and at the HTTP level (layer 7) by inspecting the HTTP header
 
 The vulnerabilities in this solution are if your “X-Allow” header is compromised via brute force, this is very unlikely but not impossible but even then if the source IP of the request is not in the CloudFront allowed list of IPs the traffic is not forwarded.
-
-
- 
-
