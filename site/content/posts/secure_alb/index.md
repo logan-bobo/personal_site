@@ -16,7 +16,7 @@ The problem is if you wish to use an ALB as an origin with CloudFront. The ALB h
 - always-on network flow monitoring, which inspects incoming traffic and applies a combination of traffic signatures, anomaly algorithms, and other analysis techniques to detect malicious traffic in real-time.
 - Automated mitigation techniques are built into AWS Shield Standard, giving underlying AWS services protection against common, frequently occurring infrastructure attacks. Automatic mitigations are applied inline to protect AWS services, so there is no latency impact.
 
-In summary, we only want traffic directed through a single publicly routable endpoint, CloudFront, to get the benefit of caching content on the edge (improved front-end performance) and in-built DDoS protection from CloudFront/AWS Shield (improved security). 
+In summary, we only want traffic directed through a single publicly routable endpoint, CloudFront, to get the benefit of caching content on the edge and in-built DDoS protection from CloudFront/AWS Shield. 
 
 Example Architecture:
 
@@ -26,7 +26,7 @@ Example Architecture:
 
 Restrict inbound connections on your ALB and CloudFront to only HTTPS. This means all traffic between the user, CF, and then the ALB is encrypted.
 
-Terraform config CloudFront origin:
+Terraform config CloudFront origin
 
 ```HCL
 origin = {
@@ -39,7 +39,7 @@ origin = {
       }
 ```
 
-Only set an HTTPS listener on your ALB
+Only set a HTTPS listener on your ALB
 
 ```HCL
 resource "aws_lb_listener" "https" {                                                                                    
