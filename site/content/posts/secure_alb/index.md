@@ -1,11 +1,9 @@
 ---
-title: "Securing your public ALB as a CloudFront Origin with Terraform."
+title: "Securing your public ALB as a CloudFront Origin with Terraform"
 date: "2023-06-01"
 draft: flase
 tags: ["AWS", "Cloud", "Terraform"]
 ---
-
-# Securing your public ALB as a CloudFront Origin with Terraform
 
 ## What is the problem?
 
