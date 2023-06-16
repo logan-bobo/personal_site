@@ -1,5 +1,5 @@
 ---
-title: "Creating an automated serverless website using AWS, GitHub and Terraform."
+title: "Creating an automated serverless website using AWS, GitHub and Terraform"
 date: "2022-03-19"
 draft: flase
 tags: ["AWS", "Cloud", "Terraform"]
